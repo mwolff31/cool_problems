@@ -7,10 +7,10 @@ def regular_idx(idx, total):
 	return idx
 
 # necklace & split index --> count from one side
-def count_one_way(necklace, ind, reverse, idxs_covered):
+def count_one_way(necklace, ind, reverse):
 	num_beads = len(necklace)
 	first = necklace[ind]
-	count = 0
+	count = 1
 	j = ind
 	k = 0
 	if reverse:
@@ -18,9 +18,7 @@ def count_one_way(necklace, ind, reverse, idxs_covered):
 	else:
 		it_step = 1
 
-	idxs_covered.append(regular_idx(ind, num_beads))
-
-	while k < num_beads:
+	while k < num_beads-1:
 
 		special_case = False
 
@@ -36,15 +34,14 @@ def count_one_way(necklace, ind, reverse, idxs_covered):
 		if not special_case:
 			next_idx = j + it_step
 
-		if ((necklace[next_idx] == first) or (necklace[next_idx] == 'w')) and (regular_idx(next_idx, num_beads) not in idxs_covered):
+		if (necklace[next_idx] == first) or (necklace[next_idx] == 'w'):
 			count+=1
 		else:
 			break
 
 		j += it_step
 		k += 1
-	print('done')
-	return count, idxs_covered
+	return count
 
 def main(necklace):
 
@@ -52,19 +49,19 @@ def main(necklace):
 	best_count = 0
 	best_split = 0
 
-
-	for i in range(num_beads-1):
-		idxs = []
-		current_count = 2
-		forward_count, idxs = count_one_way(necklace=necklace, ind=i+1, reverse=False, idxs_covered=idxs)
-		print(idxs)
-		backward_count, _ = count_one_way(necklace=necklace, ind=i, reverse=True, idxs_covered=idxs)
-		current_count = forward_count + backward_count
-		print(forward_count)
-		print(backward_count)
-		if current_count > best_count:
-			best_count = current_count
-			best_split = i
+	if count_one_way(necklace=necklace, ind=0, reverse=False) == num_beads:
+		best_count = num_beads
+		best_split=0
+	else:
+		for i in range(num_beads-1):
+			idxs = []
+			current_count = 0
+			forward_count = count_one_way(necklace=necklace, ind=i+1, reverse=False)
+			backward_count = count_one_way(necklace=necklace, ind=i, reverse=True)
+			current_count = forward_count + backward_count
+			if current_count > best_count:
+				best_count = current_count
+				best_split = i
 
 	return best_count, best_split, best_split+1
 
@@ -76,5 +73,6 @@ if __name__ == '__main__':
 
 	count, first_ind, second_ind = main(args.necklace)
 
+	print('number of beads:', len(args.necklace))
 	print('best streak:', count)
 	print('split between:', [first_ind, second_ind])
