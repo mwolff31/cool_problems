@@ -1,5 +1,4 @@
 import argparse
-import math
 
 def count_one_way(necklace, ind, reverse):
 	num_beads = len(necklace)
@@ -46,9 +45,9 @@ def main(necklace):
 	if count_one_way(necklace=necklace, ind=0, reverse=False) == num_beads:
 		best_count = num_beads
 		best_split=0
+
 	else:
 		for i in range(num_beads-1):
-			idxs = []
 			current_count = 0
 			forward_count = count_one_way(necklace=necklace, ind=i+1, reverse=False)
 			backward_count = count_one_way(necklace=necklace, ind=i, reverse=True)
