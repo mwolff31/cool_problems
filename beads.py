@@ -1,12 +1,6 @@
 import argparse
 import math
 
-def regular_idx(idx, total):
-	if math.copysign(1, idx) < 0:
-		idx = total - abs(idx)
-	return idx
-
-# necklace & split index --> count from one side
 def count_one_way(necklace, ind, reverse):
 	num_beads = len(necklace)
 	first = necklace[ind]
