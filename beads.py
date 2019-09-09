@@ -29,6 +29,9 @@ def count_one_way(necklace, ind, reverse):
 		if not special_case:
 			next_idx = j + it_step
 
+		if first == 'w' and necklace[next_idx] in ['b', 'r']:
+			first = necklace[next_idx]
+
 		if (necklace[next_idx] == first) or (necklace[next_idx] == 'w'):
 			count+=1
 		else:
