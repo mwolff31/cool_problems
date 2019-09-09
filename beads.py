@@ -1,3 +1,5 @@
+import time
+start = time.time()
 import argparse
 
 def count_one_way(necklace, ind, reverse):
@@ -42,24 +44,21 @@ def main(necklace):
 	best_count = 0
 	best_split = 0
 
-	if count_one_way(necklace=necklace, ind=0, reverse=False) == num_beads:
-		best_count = num_beads
-		best_split=0
+	for i in range(num_beads-1):
+		current_count = 0
+		forward_count = count_one_way(necklace=necklace, ind=i+1, reverse=False)
+		backward_count = count_one_way(necklace=necklace, ind=i, reverse=True)
+		current_count = forward_count + backward_count
+		if current_count > best_count:
+			best_count = current_count
+			best_split = i
 
-	else:
-		for i in range(num_beads-1):
-			current_count = 0
-			forward_count = count_one_way(necklace=necklace, ind=i+1, reverse=False)
-			backward_count = count_one_way(necklace=necklace, ind=i, reverse=True)
-			current_count = forward_count + backward_count
-			if current_count > best_count:
-				best_count = current_count
-				best_split = i
+	if best_count > num_beads:
+		best_count = num_beads
 
 	return best_count, best_split, best_split+1
 
 if __name__ == '__main__':
-
 	parser = argparse.ArgumentParser()
 	parser.add_argument('--necklace')
 	args = parser.parse_args()
@@ -69,3 +68,5 @@ if __name__ == '__main__':
 	print('number of beads:', len(args.necklace))
 	print('best streak:', count)
 	print('split between:', [first_ind, second_ind])
+	end = time.time()
+	print(end - start)
